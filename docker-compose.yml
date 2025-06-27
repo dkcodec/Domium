@@ -1,0 +1,34 @@
+
+services:
+  postgres:
+    image: postgres:15
+    restart: always
+    environment:
+      POSTGRES_DB: auth_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  nats:
+    image: nats:2.10
+    ports:
+      - "4222:4222"
+      - "8222:8222"
+
+  auth-service:
+    build: ./services/auth-service
+    environment:
+      DATABASE_URL: postgres://postgres:postgres@postgres:5432/auth_db?sslmode=disable
+      NATS_URL: nats://nats:4222
+      JWT_SECRET: supersecretkey
+    depends_on:
+      - postgres
+      - nats
+    ports:
+      - "50051:50051"
+
+volumes:
+  pgdata:

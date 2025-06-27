@@ -1,0 +1,30 @@
+# Go build
+/bin/
+/auth-service
+*.exe
+*.out
+*.test
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# System
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Proto artifacts
+**/*.pb.go
+**/*.pb.gw.go
+
+# Env
+.env
+
+# Docker volumes / misc
+pgdata/
+node_modules/
