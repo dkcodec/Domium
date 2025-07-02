@@ -1,0 +1,115 @@
+syntax = "proto3";
+
+package property;
+option go_package = "internal/proto";
+
+message Property {
+  string id = 1;
+  string owner_id = 2;
+  string title = 3;
+  string description = 4;
+  string city = 5;
+  string address_line = 6;
+  float lat = 7;
+  float lng = 8;
+  string property_type = 9;
+  int32 rooms = 10;
+  float area = 11;
+  int32 floor = 12;
+  int32 total_floors = 13;
+  int32 price_per_month = 14;
+  string currency = 15;
+  string main_image_url = 16;
+  repeated string image_urls = 17;
+  bool has_wifi = 18;
+  bool has_parking = 19;
+  bool has_elevator = 20;
+  bool is_verified = 21;
+  float rating = 22;
+  int32 reviews_count = 23;
+  repeated AvailabilityPeriod availability = 24;
+  string status = 25;
+  string created_at = 26;
+  string updated_at = 27;
+}
+
+message AvailabilityPeriod {
+  string from_date = 1;
+  string to_date = 2;
+}
+
+message CreatePropertyRequest {
+  string owner_id = 1;
+  string title = 2;
+  string description = 3;
+  string city = 4;
+  string address_line = 5;
+  float lat = 6;
+  float lng = 7;
+  string property_type = 8;
+  int32 rooms = 9;
+  float area = 10;
+  int32 floor = 11;
+  int32 total_floors = 12;
+  int32 price_per_month = 13;
+  string currency = 14;
+  string main_image_url = 15;
+  repeated string image_urls = 16;
+  bool has_wifi = 17;
+  bool has_parking = 18;
+  bool has_elevator = 19;
+  bool is_verified = 20;
+  repeated AvailabilityPeriod availability = 21;
+  string status = 22;
+}
+
+message UpdatePropertyRequest {
+  string id = 1;
+  string owner_id = 2;
+  string title = 3;
+  string description = 4;
+  string city = 5;
+  string address_line = 6;
+  float lat = 7;
+  float lng = 8;
+  string property_type = 9;
+  int32 rooms = 10;
+  float area = 11;
+  int32 floor = 12;
+  int32 total_floors = 13;
+  int32 price_per_month = 14;
+  string currency = 15;
+  string main_image_url = 16;
+  repeated string image_urls = 17;
+  bool has_wifi = 18;
+  bool has_parking = 19;
+  bool has_elevator = 20;
+  bool is_verified = 21;
+  repeated AvailabilityPeriod availability = 22;
+  string status = 23;
+}
+
+message CreatePropertyResponse {
+  string id = 1;
+}
+
+message GetPropertyRequest {
+  string id = 1;
+}
+
+message GetPropertyResponse {
+  Property property = 1;
+}
+
+message DeletePropertyRequest {
+  string id = 1;
+}
+
+message EmptyResponse {}
+
+service PropertyService {
+  rpc CreateProperty(CreatePropertyRequest) returns (CreatePropertyResponse);
+  rpc GetProperty(GetPropertyRequest) returns (GetPropertyResponse);
+  rpc UpdateProperty(UpdatePropertyRequest) returns (EmptyResponse);
+  rpc DeleteProperty(DeletePropertyRequest) returns (EmptyResponse);
+}

@@ -1,16 +1,15 @@
-
 services:
   postgres:
     image: postgres:15
     restart: always
     environment:
-      POSTGRES_DB: auth_db
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
     ports:
       - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
 
   nats:
     image: nats:2.10
@@ -29,6 +28,17 @@ services:
       - nats
     ports:
       - "50051:50051"
+
+  property-service:
+    build: ./services/property-service
+    environment:
+      DATABASE_URL: postgres://postgres:postgres@postgres:5432/property_db?sslmode=disable
+      NATS_URL: nats://nats:4222
+    depends_on:
+      - postgres
+      - nats
+    ports:
+      - "50052:50052"
 
 volumes:
   pgdata:
