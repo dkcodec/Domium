@@ -1,0 +1,6 @@
+/vendor
+**/*.local
+**/*.log
+/tmp
+.git
+node_modules
