@@ -7,7 +7,7 @@ import (
 	"property-service/internal/config"
 	"property-service/internal/handler"
 	"property-service/internal/proto"
-	"property-service/internal/repository"
+	"property-service/internal/repository/postgres"
 	"property-service/internal/service"
 
 	"github.com/joho/godotenv"
@@ -21,7 +21,7 @@ func main() {
 
 	cfg := config.Load()
 
-	db := repository.NewPostgresDB(cfg.DatabaseURL)
+	db := postgres.NewPostgresDB(cfg.DatabaseURL)
 	defer db.Close()
 
 	nc, err := nats.Connect(cfg.NatsURL)
@@ -30,7 +30,7 @@ func main() {
 	}
 	defer nc.Close()
 
-	repo := repository.NewPostgresRepo(db)
+	repo := postgres.NewPostgresRepo(db)
 	service := service.New(repo, nc)
 	handler := handler.New(service)
 
