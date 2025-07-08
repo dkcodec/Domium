@@ -1,30 +1,80 @@
 syntax = "proto3";
 
-package user;
+package auth;
+option go_package = "../internal/proto";
 
-option go_package = "internal/proto";
-
-// gRPC сервис авторизации
-service Auth {
-  rpc Register (RegisterRequest) returns (AuthResponse);
-  rpc Login (LoginRequest) returns (AuthResponse);
+message User {
+  string id = 1;
+  string email = 2;
+  bool is_email_verified = 3;
+  string created_at = 4;
+  string updated_at = 5;
 }
 
-// Запрос на регистрацию
 message RegisterRequest {
-  string phone_number = 1;
+  string email = 1;
   string password = 2;
-  string full_name = 3;
 }
 
-// Запрос на логин
+message RegisterResponse {
+  string id = 1;
+  string access_token = 2;
+  string refresh_token = 3;
+}
+
 message LoginRequest {
-  string phone_number = 1;
+  string email = 1;
   string password = 2;
 }
 
-// Ответ с токеном
-message AuthResponse {
-  string token = 1;
-  string user_id = 2;
+message LoginResponse {
+  string access_token = 1;
+  string refresh_token = 2;
+}
+
+message VerifyEmailRequest {
+  string email = 1;
+  string code = 2;
+}
+
+message VerifyEmailResponse {}
+
+message ResendVerificationCodeRequest {
+  string email = 1;
+}
+
+message ResendVerificationCodeResponse {}
+
+message GetUserRequest {
+  string id = 1;
+}
+
+message GetUserResponse {
+  User user = 1;
+}
+
+message UpdateUserRequest {
+  string id = 1;
+  string email = 2;
+  bool is_email_verified = 3;
+  string verification_code = 4;
+  string updated_at = 5;
+}
+
+message UpdateUserResponse {}
+
+message DeleteUserRequest {
+  string id = 1;
+}
+
+message DeleteUserResponse {}
+
+service AuthService {
+  rpc Register(RegisterRequest) returns (RegisterResponse);
+  rpc Login(LoginRequest) returns (LoginResponse);
+  rpc VerifyEmail(VerifyEmailRequest) returns (VerifyEmailResponse);
+  rpc ResendVerificationCode(ResendVerificationCodeRequest) returns (ResendVerificationCodeResponse);
+  rpc GetUser(GetUserRequest) returns (GetUserResponse);
+  rpc UpdateUser(UpdateUserRequest) returns (UpdateUserResponse);
+  rpc DeleteUser(DeleteUserRequest) returns (DeleteUserResponse);
 }
