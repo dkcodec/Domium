@@ -3,7 +3,7 @@ package main
 import (
 	"auth-service/internal/config"
 	"auth-service/internal/handler"
-	"auth-service/internal/repository"
+	"auth-service/internal/repository/postgres"
 	"auth-service/internal/service"
 
 	"fmt"
@@ -22,7 +22,7 @@ func main() {
 	cfg := config.Load()
 
 	// Подключаемся к PostgreSQL через репозиторий
-	db := repository.NewPostgres(cfg.DatabaseURL)
+	db := postgres.NewPostgres(cfg.DatabaseURL)	
 	defer db.Close()
 
 	// Подключаемся к NATS для публикации событий
@@ -33,7 +33,7 @@ func main() {
 	defer nc.Close()
 
 	// Инициализируем usecase слой (бизнес-логику)
-	userRepo := repository.NewUserRepo(db)
+	userRepo := postgres.NewUserRepo(db)
 	authService := service.NewAuthService(userRepo, nc, cfg.JwtSecret)
 
 	// gRPC сервер
